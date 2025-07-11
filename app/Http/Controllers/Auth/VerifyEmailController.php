@@ -4,28 +4,33 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Auth\Events\Verified;
-use Illuminate\Foundation\Auth\EmailVerificationRequest;
-use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
+use App\Models\User;
+use Illuminate\Auth\Access\AuthorizationException;
+
 
 class VerifyEmailController extends Controller
 {
-    /**
-     * Mark the authenticated user's email address as verified.
-     */
-    public function __invoke(EmailVerificationRequest $request): RedirectResponse
+    public function verify(Request $request)
     {
-        if ($request->user()->hasVerifiedEmail()) {
-            return redirect()->intended(
-                config('localhost:3000').'/login?verified=1'
-            );
+        $user = User::findOrFail($request->route('id'));
+
+        // Validate the hash
+        if (! hash_equals((string) $request->route('hash'), sha1($user->getEmailForVerification()))) {
+            throw new AuthorizationException;
         }
 
-        if ($request->user()->markEmailAsVerified()) {
-            event(new Verified($request->user()));
+        // If already verified
+        if ($user->hasVerifiedEmail()) {
+            return Redirect::to(env('FRONTEND_URL') . '/login?verified=1');
         }
 
-        return redirect()->intended(
-            config('localhost:3000').'/login?verified=1'
-        );
+        // Mark email as verified
+        $user->markEmailAsVerified();
+        event(new Verified($user));
+
+        // Redirect to frontend login
+        return Redirect::to(env('FRONTEND_URL') . '/login?verified=1');
     }
 }

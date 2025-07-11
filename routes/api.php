@@ -46,8 +46,3 @@ Route::middleware('auth:sanctum')->post('/email/verification-notification', func
     return response()->json(['message' => 'Verification link sent!']);
 });
 
-// Handle the verification callback
-Route::get('/verify-email/{id}/{hash}', function (EmailVerificationRequest $request) {
-    $request->fulfill();
-    return redirect('http://localhost:3000/login?verified=1');
-})->middleware(['auth:sanctum', 'signed'])->name('verification.verify');
