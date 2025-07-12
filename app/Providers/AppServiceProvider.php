@@ -33,7 +33,7 @@ class AppServiceProvider extends ServiceProvider
 VerifyEmail::createUrlUsing(function ($notifiable) {
         return URL::temporarySignedRoute(
             'verification.verify', // must match your route name
-            now()->addMinutes(60),
+            now()->addMinutes(20),
             [
                 'id' => $notifiable->getKey(),
                 'hash' => sha1($notifiable->getEmailForVerification()),

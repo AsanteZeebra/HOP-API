@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use Illuminate\Auth\Events\Verified;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
+use App\Http\Controllers\Auth\PasswordResetLinkController;
+use App\Http\Controllers\Auth\NewPasswordController;
 
 
 
@@ -35,6 +37,16 @@ Route::middleware('api')->group(function () {
     });
 });
 
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/user', function (Request $request) {
+        return response()->json($request->user());
+    });
+
+    Route::post('/logout', function (Request $request) {
+        $request->user()->currentAccessToken()->delete();
+        return response()->json(['message' => 'Logged out successfully']);
+    });
+});
 
 Route::middleware('auth:sanctum')->post('/email/verification-notification', function (Request $request) {
     if ($request->user()->hasVerifiedEmail()) {
@@ -45,4 +57,12 @@ Route::middleware('auth:sanctum')->post('/email/verification-notification', func
 
     return response()->json(['message' => 'Verification link sent!']);
 });
+
+Route::middleware('auth:sanctum') ->post('/send-reset-link', [PasswordResetLinkController::class, 'store'])
+    ->name('password.email');
+
+Route::post('/reset-password', [NewPasswordController::class, 'store'])
+    ->name('password.update');
+
+
 
