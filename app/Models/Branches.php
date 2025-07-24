@@ -17,6 +17,7 @@ class Branches extends Model
         'telephone',
         'email',
         'address',
+        'created_by',
         'status',
 
     ];

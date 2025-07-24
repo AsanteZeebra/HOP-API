@@ -31,9 +31,7 @@ public function store(Request $request)
     }
 
     // Get logged-in user
-    $user = auth()->user();
-    $validated['username'] = $user->username; // or $user->name, $user->email depending on what you track
-
+  $validated['created_by'] = Auth::user()->username;
     // Generate unique pastor_code
     $lastPastor = Pastor::orderBy('id', 'desc')->first();
     $nextId = $lastPastor ? $lastPastor->id + 1 : 1;

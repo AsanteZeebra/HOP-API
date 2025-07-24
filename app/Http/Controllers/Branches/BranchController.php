@@ -29,7 +29,7 @@ public function store(Request $request)
 $validated['region'] = is_array($validated['region']) ? $validated['region']['value'] : $validated['region'];
 $validated['district'] = is_array($validated['district']) ? $validated['district']['value'] : $validated['district'];
 
-
+ $validated['created_by'] = Auth::user()->username;
     // Auto-generate branch_id
     $lastBranch = Branches::orderBy('id', 'desc')->first();
     $nextId = $lastBranch ? $lastBranch->id + 1 : 1;
@@ -95,6 +95,42 @@ $validated['district'] = is_array($validated['district']) ? $validated['district
             'status' => 'success',
             'data' => $branch,
         ]);
+    }
+
+      public function update(Request $request, $branch_id)
+    {
+        $validated = $request->validate([
+            'branch_name' => 'required|string|max:255',
+            'region' => 'required|string|max:255',
+            'district' => 'required|string|max:255',
+            'type' => 'required|string|in:Main Branch,Area',
+            'town' => 'required|string|max:255',
+            'area_head' => 'required|string|max:255',
+            'telephone' => 'required|string|max:20',
+            'email' => 'required|email|max:255',
+            'address' => 'required|string|max:500',
+            'status' => 'required|in:active,suspended,closed',
+        ]);
+
+        $branch = Branches::find($branch_id);
+
+        if (!$branch) {
+            return response()->json(['status' => 'error', 'message' => 'Branch not found'], 404);
+        }
+
+        $branch->branch_name = $validated['branch_name'];
+        $branch->region = $validated['region'];
+        $branch->district = $validated['district'];
+        $branch->type = $validated['type'];
+        $branch->town = $validated['town'];
+        $branch->area_head = $validated['area_head'];
+        $branch->telephone = $validated['telephone'];
+        $branch->email = $validated['email'];
+        $branch->address = $validated['address'];
+        $branch->status = $validated['status'];
+        $branch->save();
+
+        return response()->json(['status' => 'success', 'message' => 'Branch updated successfully']);
     }
 }
 

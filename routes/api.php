@@ -82,7 +82,7 @@ Route::middleware('auth:sanctum')->post('/add-branch', [BranchController::class,
 Route::middleware('auth:sanctum')->get('/view-branches', [BranchController::class, 'index'])
     ->name('branches.index');
 
-    Route::middleware('auth:sanctum')->get('/fetch-branch', [BranchController::class, 'show'])
+    Route::middleware('auth:sanctum')->get('/fetch-branch/{pastor_code}', [BranchController::class, 'show'])
     ->name('branches.show');
 
     Route::middleware('auth:sanctum')->delete('/delete-branch/{branch_id}', [BranchController::class, 'destroy'])

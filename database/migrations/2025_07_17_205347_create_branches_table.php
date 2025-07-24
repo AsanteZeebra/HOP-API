@@ -24,6 +24,7 @@ return new class extends Migration
     $table->string('email')->unique(); // Only email is enforced unique
     $table->text('address')->nullable();
     $table->enum('status', ['active', 'inactive'])->default('active');
+    $table->string('created_by')->nullable();
     $table->softDeletes(); // For soft deletes
     $table->timestamps();
 });
