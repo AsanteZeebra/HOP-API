@@ -25,7 +25,7 @@ class RegisteredUserController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|unique:users',
-            'role' => 'required|string|in:user,Admin,Branch', // Added role validation
+            'role' => 'required|string|in:user,Admin,Branch,User', // Added role validation
             'password' => 'required|string|min:6|confirmed',
             'password_confirmation' => 'required|string|min:6',
 

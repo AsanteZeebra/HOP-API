@@ -15,7 +15,7 @@ return [
     |
     */
 
-    'paths' => ['*'],
+    'paths' => ['*','login', 'register', 'logout', 'email/verification-notification'],
 
     'allowed_methods' => ['*'],
 

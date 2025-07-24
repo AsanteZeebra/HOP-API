@@ -7,6 +7,11 @@ use Illuminate\Auth\Events\Verified;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\NewPasswordController;
+use App\Http\Controllers\Dashboard\DashbaordController;
+use App\Http\Controllers\Branches\BranchController;
+use App\Http\Controllers\Pastors\PastorsController;
+
+
 
 
 
@@ -42,11 +47,17 @@ Route::middleware('auth:sanctum')->group(function () {
         return response()->json($request->user());
     });
 
-    Route::post('/logout', function (Request $request) {
-        $request->user()->currentAccessToken()->delete();
-        return response()->json(['message' => 'Logged out successfully']);
-    });
+
+
 });
+
+
+Route::middleware('auth:sanctum')->post('/logout', function (Request $request) {
+    $request->user()->currentAccessToken()->delete();
+
+    return response()->json(['message' => 'Logged out']);
+});
+
 
 Route::middleware('auth:sanctum')->post('/email/verification-notification', function (Request $request) {
     if ($request->user()->hasVerifiedEmail()) {
@@ -63,6 +74,31 @@ Route::middleware('auth:sanctum') ->post('/send-reset-link', [PasswordResetLinkC
 
 Route::post('/reset-password', [NewPasswordController::class, 'store'])
     ->name('password.update');
+
+Route::middleware('auth:sanctum')->get('/count-dashboard', [DashbaordController::class, 'index']);
+
+Route::middleware('auth:sanctum')->post('/add-branch', [BranchController::class, 'store'])
+    ->name('branches.store');
+Route::middleware('auth:sanctum')->get('/view-branches', [BranchController::class, 'index'])
+    ->name('branches.index');
+
+    Route::middleware('auth:sanctum')->get('/fetch-branch', [BranchController::class, 'show'])
+    ->name('branches.show');
+
+    Route::middleware('auth:sanctum')->delete('/delete-branch/{branch_id}', [BranchController::class, 'destroy'])
+        ->name('branches.destroy');
+
+        Route::middleware('auth:sanctum')->get('/pastors', [PastorsController::class, 'index'])
+    ->name('pastors.index');
+
+     Route::middleware('auth:sanctum')->get('/add-pastor', [PastorsController::class, 'store'])
+    ->name('pastors.store');
+
+      Route::middleware('auth:sanctum')->delete('/delete-pastor/{pastor_code}', [PastorsController::class, 'destroy'])
+        ->name('pastors.destroy');
+
+
+
 
 
 
