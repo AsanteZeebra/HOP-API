@@ -69,33 +69,39 @@ Route::middleware('auth:sanctum')->post('/email/verification-notification', func
     return response()->json(['message' => 'Verification link sent!']);
 });
 
-Route::middleware('auth:sanctum') ->post('/send-reset-link', [PasswordResetLinkController::class, 'store'])
+    Route::middleware('auth:sanctum') ->post('/send-reset-link', [PasswordResetLinkController::class, 'store'])
     ->name('password.email');
 
-Route::post('/reset-password', [NewPasswordController::class, 'store'])
+    Route::post('/reset-password', [NewPasswordController::class, 'store'])
     ->name('password.update');
 
-Route::middleware('auth:sanctum')->get('/count-dashboard', [DashbaordController::class, 'index']);
+    Route::middleware('auth:sanctum')->get('/count-dashboard', [DashbaordController::class, 'index']);
 
-Route::middleware('auth:sanctum')->post('/add-branch', [BranchController::class, 'store'])
+    // Branches Routes
+    Route::middleware('auth:sanctum')->post('/add-branch', [BranchController::class, 'store'])
     ->name('branches.store');
-Route::middleware('auth:sanctum')->get('/view-branches', [BranchController::class, 'index'])
+    Route::middleware('auth:sanctum')->get('/view-branches', [BranchController::class, 'index'])
     ->name('branches.index');
-
-    Route::middleware('auth:sanctum')->get('/fetch-branch/{pastor_code}', [BranchController::class, 'show'])
+    Route::middleware('auth:sanctum')->get('/fetch-branch/{branch_id}', [BranchController::class, 'show'])
     ->name('branches.show');
-
     Route::middleware('auth:sanctum')->delete('/delete-branch/{branch_id}', [BranchController::class, 'destroy'])
-        ->name('branches.destroy');
+    ->name('branches.destroy');
+    Route::middleware('auth:sanctum')->put('/update-branch/{branch_id}', [BranchController::class, 'update'])
+    ->name('branches.update');
 
-        Route::middleware('auth:sanctum')->get('/pastors', [PastorsController::class, 'index'])
+     // Pastors Routes
+    Route::middleware('auth:sanctum')->get('/pastors', [PastorsController::class, 'index'])
     ->name('pastors.index');
-
-     Route::middleware('auth:sanctum')->get('/add-pastor', [PastorsController::class, 'store'])
+    Route::middleware('auth:sanctum')->post('/add-pastor', [PastorsController::class, 'store'])
     ->name('pastors.store');
-
-      Route::middleware('auth:sanctum')->delete('/delete-pastor/{pastor_code}', [PastorsController::class, 'destroy'])
-        ->name('pastors.destroy');
+    Route::middleware('auth:sanctum')->get('/fetch-pastor/{pastor_code}', [PastorsController::class, 'show'])
+    ->name('pastors.show');
+     Route::middleware('auth:sanctum')->patch('/update-pastor/{pastor_code}', [PastorsController::class, 'update'])
+    ->name('pastors.update');
+    Route::middleware('auth:sanctum')->delete('/delete-pastor/{pastor_code}', [PastorsController::class, 'destroy'])
+    ->name('pastors.destroy');
+    Route::middleware('auth:sanctum')->post('/upload-pastor-photo/{pastor_code}', [PastorsController::class, 'upload'])
+    ->name('pastors.upload');
 
 
 

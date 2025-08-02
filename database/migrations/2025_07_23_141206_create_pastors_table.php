@@ -20,12 +20,16 @@ return new class extends Migration {
     $table->string('spouse')->nullable();
     $table->string('children')->nullable();
     $table->string('telephone'); // fixed typo
+     $table->string('branch')->nullable();
     $table->date('from_date'); // renamed to avoid SQL keyword
     $table->date('to_date')->nullable(); // pastors still serving may not have a "to"
     $table->string('next_of_kin');
     $table->string('emergency_contact'); // fixed typo
      $table->string('photo')->nullable();
     $table->string('created_by')->nullable();
+     $table->string('updated_by')->nullable();
+     $table->string('deleted_by')->nullable();
+    $table->softDeletes(); // For soft deletes
     $table->string('status')->default('active');
     $table->timestamps();
 });

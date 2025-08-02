@@ -3,10 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Branches extends Model
 {
-     protected $fillable = [
+    use SoftDeletes;
+    protected $fillable = [
         'branch_name',
         'branch_id',
         'type', // Added type field
@@ -18,7 +20,10 @@ class Branches extends Model
         'email',
         'address',
         'created_by',
+        'updated_by',
+        'deleted_by',
         'status',
 
     ];
+
 }

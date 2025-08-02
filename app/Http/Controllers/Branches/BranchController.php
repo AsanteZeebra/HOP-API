@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers\Branches;
 
+
 use App\Http\Controllers\Controller;
 use App\Models\Branches;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Auth;
+
 
 class BranchController extends Controller
 {
@@ -72,7 +75,9 @@ $validated['district'] = is_array($validated['district']) ? $validated['district
         ], 404);
     }
 
-    $branch->delete();
+     $branch->deleted_by = Auth::user()->name; // ✅ track deleter
+    $branch->save();
+    $branch->delete(); //soft delete
 
     return response()->json([
         'status' => 'success',
@@ -97,40 +102,37 @@ $validated['district'] = is_array($validated['district']) ? $validated['district
         ]);
     }
 
-      public function update(Request $request, $branch_id)
-    {
-        $validated = $request->validate([
-            'branch_name' => 'required|string|max:255',
-            'region' => 'required|string|max:255',
-            'district' => 'required|string|max:255',
-            'type' => 'required|string|in:Main Branch,Area',
-            'town' => 'required|string|max:255',
-            'area_head' => 'required|string|max:255',
-            'telephone' => 'required|string|max:20',
-            'email' => 'required|email|max:255',
-            'address' => 'required|string|max:500',
-            'status' => 'required|in:active,suspended,closed',
-        ]);
+    public function update(Request $request, $branch_id)
+{
+    $validated = $request->validate([
+        'branch_name' => 'required',
+        'region' => 'required',
+        'district' => 'required',
+        'type' => 'required',
+        'town' => 'required',
+        'area_head' => 'required',
+        'telephone' => 'required',
+        'email' => 'required|email|max:255',
+        'address' => 'required|string|max:500',
+        'status' => 'required',
+    ]);
 
-        $branch = Branches::find($branch_id);
+   $branch = Branches::where('branch_id', $branch_id)->first();
 
-        if (!$branch) {
-            return response()->json(['status' => 'error', 'message' => 'Branch not found'], 404);
-        }
-
-        $branch->branch_name = $validated['branch_name'];
-        $branch->region = $validated['region'];
-        $branch->district = $validated['district'];
-        $branch->type = $validated['type'];
-        $branch->town = $validated['town'];
-        $branch->area_head = $validated['area_head'];
-        $branch->telephone = $validated['telephone'];
-        $branch->email = $validated['email'];
-        $branch->address = $validated['address'];
-        $branch->status = $validated['status'];
-        $branch->save();
-
-        return response()->json(['status' => 'success', 'message' => 'Branch updated successfully']);
+    if (!$branch) {
+        return response()->json(['status' => 'error', 'message' => 'Branch not found'], 404);
     }
+
+    $branch->fill($validated);
+    $branch->updated_by = Auth::user()->name ?? 'system'; // fallback if null
+    $branch->save();
+
+    return response()->json([
+        'status' => 'success',
+        'message' => 'Branch updated successfully',
+        'data' => $branch
+    ]);
+}
+
 }
 

@@ -25,6 +25,8 @@ return new class extends Migration
     $table->text('address')->nullable();
     $table->enum('status', ['active', 'inactive'])->default('active');
     $table->string('created_by')->nullable();
+    $table->string('updated_by')->nullable();
+     $table->string('deleted_by')->nullable();
     $table->softDeletes(); // For soft deletes
     $table->timestamps();
 });

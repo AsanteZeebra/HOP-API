@@ -17,12 +17,15 @@ class Pastor extends Model
         'spouse',
         'children',
         'telephone',
+        'branch',
         'from_date',
         'to_date',
         'next_of_kin',
         'emergency_contact',
         'photo',
         'created_by',
+        'updated_by',
+        'deleted_by',
         'status',
 
 
