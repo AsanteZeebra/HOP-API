@@ -168,9 +168,6 @@ class PastorsController extends Controller
     $pastor->save();
 
 
-
-
-
     return response()->json([
         'status' => 'success',
         'message' => 'Photo updated successfully',
