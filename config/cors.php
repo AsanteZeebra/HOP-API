@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     /*
     |--------------------------------------------------------------------------
     | Cross-Origin Resource Sharing (CORS) Configuration
@@ -19,7 +18,10 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => [env('FRONTEND_URL', 'http://app.fremikeconsult.com')],
+    'allowed_origins' => [
+        env('FRONTEND_URL', 'http://app.fremikeconsult.com'),
+        'http://localhost:3000',
+    ],
 
     'allowed_origins_patterns' => [],
 
