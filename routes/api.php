@@ -102,6 +102,9 @@ Route::middleware('auth:sanctum')->post('/email/verification-notification', func
     ->name('pastors.destroy');
     Route::middleware('auth:sanctum')->post('/upload-pastor-photo/{pastor_code}', [PastorsController::class, 'upload'])
     ->name('pastors.upload');
+     Route::middleware('auth:sanctum')->post('/transfer-pastor/{pastor_code}', [PastorsController::class, 'transfer'])
+    ->name('pastors.transfer');
+
 
 
 

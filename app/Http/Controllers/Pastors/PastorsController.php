@@ -176,4 +176,32 @@ class PastorsController extends Controller
 }
 
 
+ public function transfer(Request $request, $pastor_code)
+    {
+        $validated = $request->validate([
+            'branch' => 'required|string|max:255',
+            'from_date' => 'required|date',
+            'to_date' => 'required|date|after_or_equal:from_date',
+        ]);
+
+        $pastor = Pastor::where('pastor_code', $pastor_code)->first();
+
+        if (!$pastor) {
+            return response()->json(['status' => 'error', 'message' => 'Pastor not found'], 404);
+        }
+
+        $pastor->branch = $validated['branch'];
+        $pastor->from_date = $validated['from_date'];
+        $pastor->to_date = $validated['to_date'];
+        $pastor->updated_by = Auth::user()->name ?? 'system';
+        $pastor->save();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Pastor transfer successful',
+            'data' => $pastor
+        ]);
+    }
+
+
 }
