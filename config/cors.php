@@ -20,6 +20,7 @@ return [
 
     'allowed_origins' => [
         env('FRONTEND_URL', 'http://app.fremikeconsult.com'),
+        'https://app.fremikeconsult.com',
         'http://localhost:3000',
     ],
 
