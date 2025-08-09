@@ -107,7 +107,7 @@ Route::middleware('auth:sanctum')->post('/email/verification-notification', func
     ->name('pastors.transfer');
 
     // Members Routes
-      Route::middleware('auth:sanctum')->get('/members', [MembersController::class, 'index'])
+      Route::middleware('auth:sanctum')->get('/fetch-members', [MembersController::class, 'index'])
     ->name('members.index');
 
 

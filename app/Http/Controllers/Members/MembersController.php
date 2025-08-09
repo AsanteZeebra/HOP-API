@@ -3,8 +3,9 @@
 namespace App\Http\Controllers\Members;
 
 use App\Http\Controllers\Controller;
+use App\Models\Members;
 use Illuminate\Http\Request;
-use App\Models\Member;
+
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
@@ -25,7 +26,7 @@ class MembersController extends Controller
         ]);
 
           $validated['created_by'] = Auth::user()->name;
-        $member = Member::create($validated);
+        $member = Members::create($validated);
 
         return response()->json([
             'status' => 'success',
@@ -36,7 +37,7 @@ class MembersController extends Controller
 
        public function index()
     {
-        $pastors = Member::all();
+        $pastors = Members::all();
 
 
 
