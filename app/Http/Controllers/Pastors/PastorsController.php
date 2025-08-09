@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Validator;
 
 class PastorsController extends Controller
 {
+
     public function store(Request $request)
     {
         $validated = $request->validate([

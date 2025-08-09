@@ -10,6 +10,7 @@ use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\Dashboard\DashbaordController;
 use App\Http\Controllers\Branches\BranchController;
 use App\Http\Controllers\Pastors\PastorsController;
+use App\Http\Controllers\Members\MembersController;
 
 
 
@@ -104,6 +105,10 @@ Route::middleware('auth:sanctum')->post('/email/verification-notification', func
     ->name('pastors.upload');
      Route::middleware('auth:sanctum')->put('/transfer-pastor/{pastor_code}', [PastorsController::class, 'transfer'])
     ->name('pastors.transfer');
+
+    // Members Routes
+      Route::middleware('auth:sanctum')->get('/members', [MembersController::class, 'index'])
+    ->name('members.index');
 
 
 
